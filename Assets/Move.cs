@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using UnityEngine.EventSystems;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Move : MonoBehaviour
 {
     public float speed = 1.5f;
-    private Vector3 target;
+    public Vector3 target;
     private float MouseX;
-    private bool isMoving = false;
+    public bool isMoving = false;
     private float playerDistSizeX;
     private float playerDistSizeY;
     private float playerDistSizeZ;
@@ -25,6 +26,9 @@ public class Move : MonoBehaviour
 
     void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
          if (Input.GetMouseButtonDown(0))
           {
             // MouseX = Input.GetAxis("Mouse X");
@@ -64,10 +68,10 @@ public class Move : MonoBehaviour
     void moveTo()
     {
         transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
-        if(target.x < transform.position.x + 0.2 && target.x > transform.position.x - 0.2)
+        if(transform.position.x < target.x + 0.1 && transform.position.x > target.x - 0.1)
         {
             isMoving = false;
-            animator.SetFloat("PlayerSpeed", 0);
+            animator.SetFloat("PlayerSpeed", 0f);
 
         }
 
