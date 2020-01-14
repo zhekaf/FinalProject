@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Move : MonoBehaviour
 {
@@ -14,14 +15,13 @@ public class Move : MonoBehaviour
     private float playerDistSizeZ;
     private Vector3 playerZise;
     public Animator animator;
-   
+    
+    public Transform[] transArr = new Transform[10];
 
     void Start()
     {
         playerZise = transform.localScale;
         
-        //target = transform.position;
-        // MouseX = transform.position.x;
     }
 
     void Update()
@@ -31,49 +31,43 @@ public class Move : MonoBehaviour
 
          if (Input.GetMouseButtonDown(0))
           {
-            // MouseX = Input.GetAxis("Mouse X");
-            //target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+           
             setTargetPosition();
           }
-        //transform.position.x = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);
-        /* target = new Vector2(MouseX, transform.position.y);
-
-        transform.position = Vector2.MoveTowards(transform.position, target, speed * Time.deltaTime);*/
+       
 
         
 
          if (isMoving)
           {
-             moveTo();
             animator.SetFloat("PlayerSpeed", 1);
+            moveTo();
           }
-          target.y = transform.position.y;
-          target.z = transform.position.z;
-          playerDistSizeX = playerZise.x + transform.position.x / 50;
-          playerDistSizeY = playerZise.y + transform.position.x / 50;
-          playerDistSizeZ = playerZise.z + transform.position.x / 50;
-
-          //transform.localScale.x = playerDistSizeX;
-
-          transform.localScale = new Vector3(playerDistSizeX, playerDistSizeY, playerDistSizeZ);
+        
     }
 
     void setTargetPosition()
     {
-        target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 temp = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        target = new Vector3(transArr[0].position.x, transform.position.y, transform.position.z);
+        for (int i=1; i<11; i++)
+        {
+            if (Math.Abs(target.x - temp.x) > Math.Abs(transArr[i].position.x - temp.x))
+                target = new Vector3(transArr[i].position.x, transform.position.y, transform.position.z);
+        }
         
         isMoving = true;
     }
 
     void moveTo()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
         if(transform.position.x < target.x + 0.1 && transform.position.x > target.x - 0.1)
         {
             isMoving = false;
             animator.SetFloat("PlayerSpeed", 0f);
 
         }
+        transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
 
     }
 }
