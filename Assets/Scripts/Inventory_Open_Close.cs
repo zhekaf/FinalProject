@@ -7,7 +7,7 @@ public class Inventory_Open_Close : MonoBehaviour
     public Animator InvButtonAnim;
     private bool slideIn = false;
     public UnityEngine.UI.Image image;
-    private float trans = 0f;
+    //private float trans = 0f;
 
 
     public void InvButtonMethod()
